@@ -34,6 +34,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <?php
         require "partialize/_nav.php";
     ?>
+    <h1>Hello</h1>
     <?php
     if($showAlert){
     echo ' <div class="alert alert-success alert-dismissible fade show" role="alert">

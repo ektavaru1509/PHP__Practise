@@ -1,3 +1,28 @@
+<?php
+    $login = false;
+    $showError = false;
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+    include "partialize/_dbconnect.php";
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+    $sql = "SELECT * FROM USERS WHERE username = '$username' AND password = '$password' ";
+    $result = mysqli_query($conn, $sql);
+    $num = mysqli_num_rows($result);
+    if($num == 1){
+        $login = true;
+        session_start();
+        $_SESSION['loggedin'] = true;
+        $_SESSION['username'] = $username;
+        header("location: welcome.php");
+
+    }
+    else{
+        $showError = "Invalid Credentials";
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,10 +33,39 @@
 </head>
 <body>
     
-<?php
-require "partialize/_nav.php";
+    <?php
+        require "partialize/_nav.php";
+    ?>
+    <?php
+    if($login){
+    echo ' <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Success!</strong> You are logged in.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>';
+    }
+    if($showError){
+    echo ' <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error !</strong>' ."$showError".'
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>';
+    }
+    ?>
 
-?>
+    <div class="container my-4">
+        <h1 class="text-center">LogIn Here !!</h1>
+        <form action = "/login-registration-php/login.php" method = "post" class="container">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password">
+            </div>
+            <button type="submit" class="btn btn-primary">LogIn</button>
+        </form>
+    </div>
+
 
 
 
